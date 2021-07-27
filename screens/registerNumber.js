@@ -123,6 +123,7 @@ export default class RegisterNumber extends Component {
                 if(response.status == 200){
                     return response.json();
                 } else {
+                    alert("OTP authentication failed");
                     this.props.navigation.navigate('RegisterNumber');
                 }
             })

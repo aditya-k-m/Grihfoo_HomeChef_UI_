@@ -37,6 +37,11 @@ export default class Login extends Component {
         this.verifyHomemaker();
     }
 
+    toContactUs(){
+        this.props.navigation.navigate('ContactUs');
+    }
+
+    //Asynchronous
     async verifyHomemaker(){
         try {
             await fetch(this.url+'api/homemaker/'+this.state.currentNumber, {
@@ -53,7 +58,7 @@ export default class Login extends Component {
                     this.generateOTP();
                 }
                 else {
-                    this.props.navigation.navigate('Register');
+                    this.toRegister();
                 }
             });
         } catch (e) {
@@ -94,7 +99,7 @@ export default class Login extends Component {
 
     async generateJWT(){
         try {
-            await fetch(this.url+'api/homemaker/generateToken', {
+            await fetch(this.url+'api/homemaker/generateTokenLogin', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -106,19 +111,21 @@ export default class Login extends Component {
                 })
             })
             .then ((response) => {
-                console.log("Status of Response to /genearteToken : "+response.status);
+                console.log("Status of Response to /genearteTokenLogin : "+response.status);
                 if (response.status == 200){
-                    this.setState({
-                        jwt: response.json()
-                });
-                this.startSession();
+                    return response.json();
                 }
                 else {
-                    this.setState({
-                        currentNumber: ""
-                    })
+                    alert("OTP authentication failed");
                 }
-            });
+            })
+            .then(response => {
+                console.log("Token Generated = "+response.token);
+                this.setState({
+                    jwt: response.token
+                });
+                this.startSession();
+            })
         }
         catch (e) {
             console.log(e);
@@ -171,8 +178,12 @@ export default class Login extends Component {
                     <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', paddingTop: 8, paddingHorizontal: 10 }}>Get OTP</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => { this.toRegister() }} style={{ paddingBottom: 50, marginTop: 'auto' }} >
+                <TouchableOpacity onPress={() => { this.toRegister() }} style={{ paddingBottom: 10, marginTop: 'auto' }} >
                     <Text style={{fontSize: 16, color: 'blue'}} >New to Grihfoo ? Register here !</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { this.toContactUs() }} style={{ paddingBottom: 30, marginTop: 1 }} >
+                    <Text style={{fontSize: 16, color: 'blue'}} >Trouble Logging in ? Contact Us</Text>
                 </TouchableOpacity>
 
                 <Modal animationIn="slideInUp"

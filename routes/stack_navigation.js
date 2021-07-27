@@ -11,6 +11,7 @@ import Profile from '../screens/profile';
 import Login from '../screens/login';
 import Register from '../screens/register';
 import RegisterNumber from '../screens/registerNumber';
+import ContactUs from '../screens/contact_us';
 
 const screens = {
     Login: {
@@ -66,6 +67,12 @@ const screens = {
     },
     RegisterNumber: {
         screen: RegisterNumber,
+        navigationOptions: {
+            headerShown: false
+        }
+    },
+    ContactUs: {
+        screen: ContactUs,
         navigationOptions: {
             headerShown: false
         }
